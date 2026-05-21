@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login de Usuario - CTA Grupo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      background-image: url('grupo1.png.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 0;
+    }
+
+    .bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 10, 25, 0.35);
+    }
+
+    .login-card {
+      position: relative;
+      z-index: 10;
+      background: rgba(18, 22, 38, 0.92);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 38px 36px 34px;
+      width: 100%;
+      max-width: 390px;
+      box-shadow: 0 0 60px rgba(0,0,0,0.7), 0 0 30px rgba(200,30,30,0.15);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-card h2 {
+      color: #ffffff;
+      font-size: 1.45rem;
+      font-weight: 700;
+      margin-bottom: 26px;
+    }
+
+    .error-msg { color: #e53935; font-size: 0.78rem; margin-bottom: 14px; display: none; }
+    .error-msg.visible { display: block; }
+
+    .input-group { position: relative; margin-bottom: 14px; }
+
+    .input-icon {
+      position: absolute;
+      left: 13px; top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,0.4);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 13px 44px 13px 40px;
+      background: rgba(10, 14, 30, 0.7);
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .input-group input::placeholder { color: rgba(255,255,255,0.3); }
+    .input-group input:focus {
+      border-color: rgba(66,133,244,0.6);
+      box-shadow: 0 0 0 3px rgba(66,133,244,0.1);
+    }
+
+    .toggle-pass {
+      position: absolute; right: 13px; top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer; color: rgba(255,255,255,0.4);
+      font-size: 1rem; user-select: none; transition: color 0.2s;
+    }
+    .toggle-pass:hover { color: rgba(255,255,255,0.75); }
+
+    .forgot-link {
+      display: block; text-align: right;
+      color: rgba(255,255,255,0.5); font-size: 0.78rem;
+      margin-bottom: 22px; text-decoration: none; transition: color 0.2s;
+    }
+    .forgot-link:hover { color: #fff; }
+
+    .btn-login {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #1a6cf5, #1251c0);
+      border: none; border-radius: 8px;
+      color: #ffffff; font-size: 1rem; font-weight: 700;
+      letter-spacing: 1px; cursor: pointer;
+      transition: background 0.25s, transform 0.1s, box-shadow 0.25s;
+      box-shadow: 0 4px 20px rgba(26,108,245,0.4);
+    }
+    .btn-login:hover {
+      background: linear-gradient(135deg, #2979ff, #1565c0);
+      box-shadow: 0 6px 28px rgba(26,108,245,0.55);
+    }
+    .btn-login:active { transform: scale(0.98); }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+
+  <div class="login-card">
+    <h2>Login de Usuario</h2>
+    <p class="error-msg" id="errorMsg"></p>
+
+    <form method="POST" action="login.php">
+      <div class="input-group">
+        <span class="input-icon">👤</span>
+        <input type="text" name="usuario" placeholder="Usuario" autocomplete="username" required />
+      </div>
+
+      <div class="input-group">
+        <span class="input-icon">🔒</span>
+        <input type="password" name="contrasena" id="contrasena" placeholder="Ingrese una contraseña" required />
+        <span class="toggle-pass" id="togglePass">👁</span>
+      </div>
+
+      <a href="#" class="forgot-link">Olvidé la Contraseña</a>
+      <button type="submit" class="btn-login">Login</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('togglePass').addEventListener('click', () => {
+      const input = document.getElementById('contrasena');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const error  = params.get('error');
+    const msgEl  = document.getElementById('errorMsg');
+    if (error === 'campos') {
+      msgEl.textContent = 'Por favor complete todos los campos.';
+      msgEl.classList.add('visible');
+    } else if (error === 'invalido') {
+      msgEl.textContent = 'Usuario o contraseña incorrectos.';
+      msgEl.classList.add('visible');
+    }
+  </script>
+
+</body>
+</html>
